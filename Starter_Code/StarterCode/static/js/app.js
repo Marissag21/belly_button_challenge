@@ -57,20 +57,16 @@ function makePlots(testSubjectId) {
 }   
 
 //Get metadata
-function makeMetadata(sample) {
+function makeMetadata(testSubjectId) {
     d3.json(url).then((data) => {
         let metaData = data.metadata;
-        console.log(sample);
-        let metaDataTestSubject = metadata.filter(sampleObj => bacteriaInfo.id == sample);
-        let resultMetaData = metaDataTestSubject([0]);
+        let metaDataTestSubject = metaData.filter(bacteriaInfo => bacteriaInfo.id == testSubjectId);
+        let resultMetaData = metaDataTestSubject[0];
         let panel = d3.select("#sample-metadata");
         panel.html("");
-        for (key in metaData) {
-            let newPanel = resultMetaData.append(value);
-            newPanel.attr("value", id);
-            newPanel.text(id);
-        } 
-
+        for (key in resultMetaData) {
+            panel.append("h6").text(`${key.toUpperCase()}: ${resultMetaData[key]}`);
+        }
     })
 }
 
@@ -80,7 +76,8 @@ function optionChanged(testSubjectId) {
     makeMetadata(testSubjectId);
 }
 
-// create function for the dropdown
+// Initialize page
+//create function for the dropdown
 function init() {
     d3.json(url).then((data) => {
         let subjects = data.names;
@@ -91,7 +88,7 @@ function init() {
             newOption.attr("value", id);
             newOption.text(id);
         }   
-    
+        //sets the first subject=940 to show up 
         let subjectOne = subjects[0];
         optionChanged(subjectOne); 
     })
